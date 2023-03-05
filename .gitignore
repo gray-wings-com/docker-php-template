@@ -1,0 +1,16 @@
+# All
+.env
+
+# PostgreSQL
+
+infrastructure/db/data/
+
+# Neo4j
+
+infrastructure/graph-db/
+
+# Server-side
+app/vendor/
+
+# Front-end
+dist/

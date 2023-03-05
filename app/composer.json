@@ -1,0 +1,16 @@
+{
+    "name": "graywings/knowledge-graph",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Graywings\\KnowledgeGraph\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "tterashima",
+            "email": "taira.terashima@gmail.com"
+        }
+    ],
+    "require": {}
+}

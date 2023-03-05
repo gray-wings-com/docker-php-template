@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+  web:
+    build:
+      context: ./infrastructure/web
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+    ports:
+      - "${NGINX_HTTP_PORT}:80"
+    depends_on:
+      - app
+  app:
+    build:
+      context: .
+      dockerfile: ./infrastructure/app/Dockerfile
+    volumes:
+      - ./app:/app
+    expose:
+      - 9000
+    depends_on:
+      - db
+      - graph-db
+  db:
+    image: postgres:latest
+    environment:
+      TZ: ${TIMEZONE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB_NAME: ${POSTGRES_DB_NAME}
+    volumes:
+      - ./infrastructure/db/data:/var/lib/postgresql/data
+      - ./infrastructure/db/sql:/docker-entrypoint-initdb.d
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+  graph-db:
+    image: neo4j:latest
+    volumes:
+      - ./infrastructure/graph-db/data:/data
+      - ./infrastructure/graph-db/log:/log
+      - ./infrastructure/graph-db/import:/var/lib/neo4j/import
+      - ./infrastructure/graph-db/plugins:/plugins
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    ports:
+      - "${NEO4J_HTTP_PORT}:7474"
+    expose:
+      - 7687
